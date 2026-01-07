@@ -75,7 +75,6 @@
         
         .input-field {
             width: 100%;
-            /* Padding-right increased to 2.5rem to avoid text overlapping arrow */
             padding: 0.875rem 2.5rem 0.875rem 2.75rem; 
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
@@ -100,13 +99,14 @@
             transform: translateY(-50%);
             font-size: 1.1rem;
             pointer-events: none;
-            transition: transform 0.2s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 10;
         }
 
         .input-field:focus + .input-icon,
         .input-field:focus ~ .input-icon {
-            transform: translateY(-50%) scale(1.1);
+            transform: translateY(-50%) scale(1.25);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
         }
 
         /* Select Arrow Positioning Fix */
@@ -241,15 +241,15 @@
                     <div class="input-group">
                         <label>Họ và tên học sinh</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-user input-icon icon-blue"></i>
                             <input type="text" name="studentName" required class="input-field" placeholder="Nhập họ và tên...">
+                            <i class="fas fa-user input-icon icon-blue"></i>
                         </div>
                     </div>
                     <div class="input-group">
                         <label>Trường (THCS/THPT)</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-school input-icon icon-indigo"></i>
                             <input type="text" name="school" required class="input-field" placeholder="Ví dụ: Dĩ An">
+                            <i class="fas fa-school input-icon icon-indigo"></i>
                         </div>
                     </div>
                 </div>
@@ -259,7 +259,6 @@
                     <div class="input-group">
                         <label>Khối lớp</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-layer-group input-icon icon-red"></i>
                             <select name="grade" required class="input-field appearance-none cursor-pointer">
                                 <option value="" disabled selected>Chọn khối</option>
                                 <option value="6">Khối 6</option>
@@ -270,13 +269,13 @@
                                 <option value="11">Khối 11</option>
                                 <option value="12">Khối 12</option>
                             </select>
+                            <i class="fas fa-layer-group input-icon icon-red"></i>
                             <i class="fas fa-chevron-down select-arrow"></i>
                         </div>
                     </div>
                     <div class="input-group">
                         <label>Môn học</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-book-open input-icon icon-teal"></i>
                             <select name="subject" required class="input-field appearance-none cursor-pointer">
                                 <option value="" disabled selected>Chọn môn học</option>
                                 <option value="Toán">Toán</option>
@@ -284,6 +283,7 @@
                                 <option value="Ngữ Văn">Ngữ Văn</option>
                                 <option value="KHTN">KHTN</option>
                             </select>
+                            <i class="fas fa-book-open input-icon icon-teal"></i>
                             <i class="fas fa-chevron-down select-arrow"></i>
                         </div>
                     </div>
@@ -294,16 +294,16 @@
                     <div class="input-group">
                         <label>Điểm số</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-star input-icon icon-amber"></i>
                             <input type="number" name="score" step="0.01" min="0" max="10" required 
                                 class="input-field font-bold text-amber-600" placeholder="0.0 - 10.0">
+                            <i class="fas fa-star input-icon icon-amber"></i>
                         </div>
                     </div>
                     <div class="input-group">
                         <label>Tên Giáo Viên dạy</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-chalkboard-teacher input-icon icon-purple"></i>
                             <input type="text" name="teacherName" required class="input-field" placeholder="Ví dụ: Cô Lan">
+                            <i class="fas fa-chalkboard-teacher input-icon icon-purple"></i>
                         </div>
                     </div>
                 </div>
@@ -313,7 +313,6 @@
                     <div class="input-group">
                         <label>Cơ sở</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-map-marker-alt input-icon icon-rose"></i>
                             <select name="campus" required class="input-field appearance-none cursor-pointer">
                                 <option value="" disabled selected>Chọn cơ sở</option>
                                 <option value="Khu C2 Miễn Phí">Khu C2 Miễn Phí</option>
@@ -323,6 +322,7 @@
                                 <option value="Đông Hòa">Đông Hòa</option>
                                 <option value="Võ Trường Toản">Võ Trường Toản</option>
                             </select>
+                            <i class="fas fa-map-marker-alt input-icon icon-rose"></i>
                             <i class="fas fa-chevron-down select-arrow"></i>
                         </div>
                     </div>
@@ -380,15 +380,15 @@
                     <div class="input-group">
                         <label class="text-amber-800">Tên Giáo Viên</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-user-tie input-icon text-amber-500"></i>
                             <input type="text" id="linkTeacherName" class="input-field border-amber-200 focus:border-amber-500 focus:ring-amber-500 bg-white" placeholder="Nhập tên người gửi...">
+                            <i class="fas fa-user-tie input-icon text-amber-500"></i>
                         </div>
                     </div>
                     <div class="input-group">
                         <label class="text-amber-800">Link Sheet</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-link input-icon text-amber-500"></i>
                             <input type="url" id="sheetLinkInput" class="input-field border-amber-200 focus:border-amber-500 focus:ring-amber-500 bg-white" placeholder="https://docs.google.com/spreadsheets/...">
+                            <i class="fas fa-link input-icon text-amber-500"></i>
                         </div>
                     </div>
                 </div>
@@ -459,7 +459,7 @@
     <!-- Script Logic -->
     <script>
         // CẤU HÌNH: Thay thế URL bên dưới bằng URL Web App từ Google Apps Script của bạn
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPccZgkJqYVoOkyXOs0ByXJl49bQHLTd7a3w9PSkLTPf3UNL2jXB_xwYxx-Ixa75C8iA/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvDJS3Y9t1BN9TWhaDBb0i1Yfn3Xh2EPDP4DVMcoIyn47bFtkH0FM4gu1JrCTQ_E5L1w/exec';
         let bulkData = [];
 
         function switchTab(tab) {
@@ -520,6 +520,7 @@
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, {type: 'array'});
                 const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                // header: 1 để đọc dữ liệu dạng mảng [Array, Array, ...]
                 const jsonData = XLSX.utils.sheet_to_json(sheet, {header: 1});
                 processExcelData(jsonData);
             };
@@ -531,23 +532,28 @@
                 showModal('error', 'Lỗi File', 'File tải lên không có dữ liệu!');
                 return;
             }
-            // Updated mapping for new "Khoi" column
-            // Expected: HoTen(0), Truong(1), Khoi(2), Mon(3), Diem(4), GV(5), CoSo(6)
+            
+            // MAP DỮ LIỆU: Đảm bảo đúng thứ tự cột trong File Excel mẫu
+            // Cột 0: HoTen | 1: Truong | 2: Khoi | 3: Mon | 4: Diem | 5: GV | 6: CoSo
             const parsedData = rows.slice(1).map(row => {
+                // Bỏ qua dòng trống nếu không có tên học sinh
                 if (!row[0]) return null;
+                
                 return {
-                    studentName: row[0] || "", 
-                    school: row[1] || "", 
-                    grade: row[2] || "", 
-                    subject: row[3] || "",
-                    score: row[4] || "", 
-                    teacherName: row[5] || "", 
-                    campus: row[6] || "",
+                    studentName: String(row[0] || "").trim(), 
+                    school: String(row[1] || "").trim(), 
+                    grade: String(row[2] || "").trim(), // Lấy cột Khối (Index 2)
+                    subject: String(row[3] || "").trim(),
+                    score: row[4], // Điểm giữ nguyên số hoặc chuỗi
+                    teacherName: String(row[5] || "").trim(), 
+                    campus: String(row[6] || "").trim(),
                     timestamp: new Date().toLocaleString('vi-VN')
                 };
             }).filter(item => item !== null);
+
             bulkData = parsedData;
             renderPreview(parsedData);
+            
             const btnBulk = document.getElementById('submitBtnBulk');
             if (parsedData.length > 0) {
                 btnBulk.disabled = false;
