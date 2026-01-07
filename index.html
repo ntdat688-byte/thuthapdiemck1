@@ -48,7 +48,6 @@
     <style>
         body {
             background-color: #f0f4f8;
-            /* Thêm họa tiết nền nhẹ cho bớt đơn điệu */
             background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
             background-size: 24px 24px;
         }
@@ -115,6 +114,7 @@
         .icon-amber { color: #f59e0b; }
         .icon-purple { color: #a855f7; }
         .icon-rose { color: #f43f5e; }
+        .icon-red { color: #ef4444; } /* New color for Grade */
 
         /* Tabs */
         .nav-pill {
@@ -222,7 +222,7 @@
         <!-- TAB 1: NHẬP LẺ -->
         <div id="single-content" class="tab-content block p-6 md:p-10 pt-8">
             <form id="gradeForm" class="space-y-6">
-                <!-- Hàng 1 -->
+                <!-- Hàng 1: Tên & Trường -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="input-group">
                         <label>Họ và tên học sinh</label>
@@ -240,8 +240,25 @@
                     </div>
                 </div>
 
-                <!-- Hàng 2 -->
+                <!-- Hàng 2: Khối & Môn -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="input-group">
+                        <label>Khối lớp</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-layer-group input-icon icon-red"></i>
+                            <select name="grade" required class="input-field appearance-none cursor-pointer">
+                                <option value="" disabled selected>Chọn khối</option>
+                                <option value="6">Khối 6</option>
+                                <option value="7">Khối 7</option>
+                                <option value="8">Khối 8</option>
+                                <option value="9">Khối 9</option>
+                                <option value="10">Khối 10</option>
+                                <option value="11">Khối 11</option>
+                                <option value="12">Khối 12</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
+                        </div>
+                    </div>
                     <div class="input-group">
                         <label>Môn học</label>
                         <div class="input-wrapper">
@@ -256,6 +273,10 @@
                             <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
                         </div>
                     </div>
+                </div>
+
+                <!-- Hàng 3: Điểm & GV -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="input-group">
                         <label>Điểm số</label>
                         <div class="input-wrapper">
@@ -264,10 +285,6 @@
                                 class="input-field font-bold text-amber-600" placeholder="0.0 - 10.0">
                         </div>
                     </div>
-                </div>
-
-                <!-- Hàng 3 -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="input-group">
                         <label>Tên Giáo Viên dạy</label>
                         <div class="input-wrapper">
@@ -275,6 +292,10 @@
                             <input type="text" name="teacherName" required class="input-field" placeholder="Ví dụ: Cô Lan">
                         </div>
                     </div>
+                </div>
+
+                <!-- Hàng 4: Cơ sở -->
+                <div class="grid grid-cols-1 gap-6">
                     <div class="input-group">
                         <label>Cơ sở</label>
                         <div class="input-wrapper">
@@ -324,6 +345,9 @@
                     <h3 class="text-slate-700 font-semibold text-lg group-hover:text-green-600 transition-colors">Kéo thả file Excel vào đây</h3>
                     <p class="text-slate-400 text-sm mt-1">Hoặc nhấn để chọn file (.xlsx)</p>
                 </div>
+                <div class="text-center text-xs text-gray-400">
+                    * Cột yêu cầu: HoTen, Truong, Khoi, Mon, Diem, GV, CoSo
+                </div>
             </div>
 
             <div class="relative flex py-2 items-center">
@@ -372,6 +396,7 @@
                             <tr>
                                 <th class="px-5 py-3">Họ Tên</th>
                                 <th class="px-5 py-3">Trường</th>
+                                <th class="px-5 py-3 text-center">Khối</th>
                                 <th class="px-5 py-3">Môn</th>
                                 <th class="px-5 py-3 text-center">Điểm</th>
                                 <th class="px-5 py-3">GV</th>
@@ -491,11 +516,18 @@
                 showModal('error', 'Lỗi File', 'File tải lên không có dữ liệu!');
                 return;
             }
+            // Updated mapping for new "Khoi" column
+            // Expected: HoTen(0), Truong(1), Khoi(2), Mon(3), Diem(4), GV(5), CoSo(6)
             const parsedData = rows.slice(1).map(row => {
                 if (!row[0]) return null;
                 return {
-                    studentName: row[0] || "", school: row[1] || "", subject: row[2] || "",
-                    score: row[3] || "", teacherName: row[4] || "", campus: row[5] || "",
+                    studentName: row[0] || "", 
+                    school: row[1] || "", 
+                    grade: row[2] || "", 
+                    subject: row[3] || "",
+                    score: row[4] || "", 
+                    teacherName: row[5] || "", 
+                    campus: row[6] || "",
                     timestamp: new Date().toLocaleString('vi-VN')
                 };
             }).filter(item => item !== null);
@@ -520,6 +552,7 @@
                     <tr class="hover:bg-slate-50 transition-colors">
                         <td class="px-5 py-3 font-medium text-slate-800">${item.studentName}</td>
                         <td class="px-5 py-3 text-slate-500">${item.school}</td>
+                        <td class="px-5 py-3 text-center text-slate-700 font-medium">${item.grade}</td>
                         <td class="px-5 py-3 text-slate-500">${item.subject}</td>
                         <td class="px-5 py-3 font-bold text-blue-600 text-center">${item.score}</td>
                         <td class="px-5 py-3 text-slate-500">${item.teacherName}</td>
@@ -527,7 +560,7 @@
                     </tr>`;
             });
             if (data.length > 5) {
-                tbody.innerHTML += `<tr><td colspan="6" class="px-5 py-3 text-center text-xs text-slate-400 italic">... và ${data.length - 5} bản ghi khác ...</td></tr>`;
+                tbody.innerHTML += `<tr><td colspan="7" class="px-5 py-3 text-center text-xs text-slate-400 italic">... và ${data.length - 5} bản ghi khác ...</td></tr>`;
             }
         }
 
@@ -638,8 +671,8 @@
             e.preventDefault();
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.aoa_to_sheet([
-                ["HoTen", "Truong", "Mon", "Diem", "GV", "CoSo"],
-                ["Nguyễn Văn A", "Dĩ An", "Toán", 8.5, "Thầy Ba", "Đông Hòa"]
+                ["HoTen", "Truong", "Khoi", "Mon", "Diem", "GV", "CoSo"],
+                ["Nguyễn Văn A", "Dĩ An", "9", "Toán", 8.5, "Thầy Ba", "Đông Hòa"]
             ]);
             XLSX.utils.book_append_sheet(wb, ws, "Mau_Nhap_Diem");
             XLSX.writeFile(wb, "Mau_Nhap_Diem_TamDuc.xlsx");
@@ -647,3 +680,67 @@
     </script>
 </body>
 </html>
+```
+
+### Lưu ý quan trọng cho Backend (Google Apps Script)
+
+Vì bạn đã thêm cột "Khối" vào dữ liệu gửi đi, bạn cần **cập nhật lại code trong Google Apps Script** để nó lưu đúng cột này vào Sheet.
+
+Hãy sửa lại hàm `doPost` trong Apps Script như sau:
+
+```javascript
+function doPost(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var rawData = JSON.parse(e.postData.contents);
+  var timestamp = new Date().toLocaleString("vi-VN");
+
+  // Trường hợp 1: Nhập lẻ (Single)
+  if (rawData.type === 'single' || !rawData.type) {
+    sheet.appendRow([
+      rawData.timestamp || timestamp,
+      rawData.studentName,
+      rawData.school,
+      rawData.grade, // THÊM CỘT KHỐI Ở ĐÂY
+      rawData.subject,
+      rawData.score,
+      rawData.teacherName,
+      rawData.campus
+    ]);
+  } 
+  
+  // Trường hợp 2: Nhập hàng loạt từ Excel (Bulk)
+  else if (rawData.type === 'bulk' && rawData.data && rawData.data.length > 0) {
+    var rowsToAdd = rawData.data.map(function(item) {
+      return [
+        item.timestamp || timestamp,
+        item.studentName,
+        item.school,
+        item.grade, // THÊM CỘT KHỐI Ở ĐÂY
+        item.subject,
+        item.score,
+        item.teacherName,
+        item.campus
+      ];
+    });
+    
+    var lastRow = sheet.getLastRow();
+    sheet.getRange(lastRow + 1, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
+  }
+  
+  // Trường hợp 3: Gửi Link Sheet (Link)
+  else if (rawData.type === 'link') {
+    sheet.appendRow([
+      rawData.timestamp || timestamp,
+      "LINK GOOGLE SHEET",
+      rawData.url,
+      "-", // Khối
+      "-", // Môn
+      "-", // Điểm
+      rawData.teacherName,
+      "-"
+    ]);
+  }
+
+  return ContentService.createTextOutput(JSON.stringify({"result":"success"}))
+    .setMimeType(ContentService.MimeType.JSON);
+}
