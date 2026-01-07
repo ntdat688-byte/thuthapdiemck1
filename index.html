@@ -75,7 +75,8 @@
         
         .input-field {
             width: 100%;
-            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            /* Padding-right increased to 2.5rem to avoid text overlapping arrow */
+            padding: 0.875rem 2.5rem 0.875rem 2.75rem; 
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 0.75rem;
@@ -100,11 +101,24 @@
             font-size: 1.1rem;
             pointer-events: none;
             transition: transform 0.2s;
+            z-index: 10;
         }
 
         .input-field:focus + .input-icon,
         .input-field:focus ~ .input-icon {
             transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Select Arrow Positioning Fix */
+        .select-arrow {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            z-index: 10;
         }
 
         /* Custom Colors for Icons */
@@ -114,7 +128,7 @@
         .icon-amber { color: #f59e0b; }
         .icon-purple { color: #a855f7; }
         .icon-rose { color: #f43f5e; }
-        .icon-red { color: #ef4444; } /* New color for Grade */
+        .icon-red { color: #ef4444; }
 
         /* Tabs */
         .nav-pill {
@@ -256,7 +270,7 @@
                                 <option value="11">Khối 11</option>
                                 <option value="12">Khối 12</option>
                             </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
+                            <i class="fas fa-chevron-down select-arrow"></i>
                         </div>
                     </div>
                     <div class="input-group">
@@ -270,7 +284,7 @@
                                 <option value="Ngữ Văn">Ngữ Văn</option>
                                 <option value="KHTN">KHTN</option>
                             </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
+                            <i class="fas fa-chevron-down select-arrow"></i>
                         </div>
                     </div>
                 </div>
@@ -309,7 +323,7 @@
                                 <option value="Đông Hòa">Đông Hòa</option>
                                 <option value="Võ Trường Toản">Võ Trường Toản</option>
                             </select>
-                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none text-xs"></i>
+                            <i class="fas fa-chevron-down select-arrow"></i>
                         </div>
                     </div>
                 </div>
@@ -444,6 +458,7 @@
 
     <!-- Script Logic -->
     <script>
+        // CẤU HÌNH: Thay thế URL bên dưới bằng URL Web App từ Google Apps Script của bạn
         const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPccZgkJqYVoOkyXOs0ByXJl49bQHLTd7a3w9PSkLTPf3UNL2jXB_xwYxx-Ixa75C8iA/exec';
         let bulkData = [];
 
@@ -680,67 +695,3 @@
     </script>
 </body>
 </html>
-```
-
-### Lưu ý quan trọng cho Backend (Google Apps Script)
-
-Vì bạn đã thêm cột "Khối" vào dữ liệu gửi đi, bạn cần **cập nhật lại code trong Google Apps Script** để nó lưu đúng cột này vào Sheet.
-
-Hãy sửa lại hàm `doPost` trong Apps Script như sau:
-
-```javascript
-function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-  var rawData = JSON.parse(e.postData.contents);
-  var timestamp = new Date().toLocaleString("vi-VN");
-
-  // Trường hợp 1: Nhập lẻ (Single)
-  if (rawData.type === 'single' || !rawData.type) {
-    sheet.appendRow([
-      rawData.timestamp || timestamp,
-      rawData.studentName,
-      rawData.school,
-      rawData.grade, // THÊM CỘT KHỐI Ở ĐÂY
-      rawData.subject,
-      rawData.score,
-      rawData.teacherName,
-      rawData.campus
-    ]);
-  } 
-  
-  // Trường hợp 2: Nhập hàng loạt từ Excel (Bulk)
-  else if (rawData.type === 'bulk' && rawData.data && rawData.data.length > 0) {
-    var rowsToAdd = rawData.data.map(function(item) {
-      return [
-        item.timestamp || timestamp,
-        item.studentName,
-        item.school,
-        item.grade, // THÊM CỘT KHỐI Ở ĐÂY
-        item.subject,
-        item.score,
-        item.teacherName,
-        item.campus
-      ];
-    });
-    
-    var lastRow = sheet.getLastRow();
-    sheet.getRange(lastRow + 1, 1, rowsToAdd.length, rowsToAdd[0].length).setValues(rowsToAdd);
-  }
-  
-  // Trường hợp 3: Gửi Link Sheet (Link)
-  else if (rawData.type === 'link') {
-    sheet.appendRow([
-      rawData.timestamp || timestamp,
-      "LINK GOOGLE SHEET",
-      rawData.url,
-      "-", // Khối
-      "-", // Môn
-      "-", // Điểm
-      rawData.teacherName,
-      "-"
-    ]);
-  }
-
-  return ContentService.createTextOutput(JSON.stringify({"result":"success"}))
-    .setMimeType(ContentService.MimeType.JSON);
-}
